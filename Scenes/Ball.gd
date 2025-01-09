@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 var win_size : Vector2
 const START_SPEED : int = 500
-const ACCELERATION : int = 50
+var ACCELERATION : int = 50
 const MAX_Y_DIRECTION_VECTOR : float = 0.6
 var speed : int
 var direction : Vector2
@@ -25,7 +25,21 @@ func _physics_process(delta):
 		collider = collision.get_collider() #returns the object the ball collided with
 		
 		#If the balls hits a paddle
-		if collider == $"../Player" || collider == $"../CPU":
+		if collider == $"../Player":
+			var charge : float = $"../Player".get_charge()
+			var effect = (charge * ACCELERATION) - 60
+			
+			
+			if Input.is_action_pressed("ui_accept"):
+				print("effect: ", effect)
+				speed = speed + effect
+				
+				print(speed)
+			else:
+				speed += ACCELERATION
+			direction = new_direction(collider)
+			
+		elif collider == $"../CPU":
 			speed += ACCELERATION
 			direction = new_direction(collider)
 		else:
